@@ -1,2 +1,3 @@
-# hashimotoivory.github.io
-How to use DDP in single and multiple models training. 
+## This webpage shows how to use the DDP and git
+
+> for demonstration
