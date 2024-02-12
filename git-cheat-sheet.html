@@ -4,62 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Git Command Summary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-left: 3px solid #d0d0d0;
+        }
+        h2 {
+            color: #333;
+        }
+    </style>
 </head>
 <body>
     <h1>Git Command Summary</h1>
-
-    <h2>Configuring Git Settings</h2>
-    <p>Set configuration options for the local repository:</p>
-    <pre><code>git config user.name "Your Name"
-git config user.email "your.email@example.com"</code></pre>
-
-    <p>Check configuration settings:</p>
-    <pre><code>git config --list
+    
+    <h2>Local Git Configs</h2>
+    <pre><code># set-up local config in the folder
+git config user.name "hashimoto"
+git config user.email "your.email@example.com"
+# check
+git config --list
 git config user.name
 git config user.email</code></pre>
 
-    <h2>Pushing Changes</h2>
-    <p>Push changes to the remote repository:</p>
-    <pre><code>git push origin &lt;branch-name&gt;</code></pre>
-
-    <p>Set upstream branch and push:</p>
-    <pre><code>git push -u origin &lt;branch-name&gt;</code></pre>
+    <h2>Pushing</h2>
+    <pre><code># push to origin branch
+git push origin $BRANCH
+# set upstream branch, creates a tracking reference for every branch, allows to use commands such as `git pull` without any arguments
+git push -u origin $BRANCH</code></pre>
 
     <h2>Undoing Commits</h2>
-    <p>Soft reset (undo commit but keep changes):</p>
-    <pre><code>git reset --soft HEAD~1</code></pre>
-
-    <p>Hard reset (undo commit and discard changes):</p>
-    <pre><code>git reset --hard HEAD~1</code></pre>
-
-    <p>Force push after reset (use with caution):</p>
-    <pre><code>git push origin &lt;branch-name&gt; --force</code></pre>
+    <pre><code># soft reset (undo commit but keep changes), ~$STEPS$ how many steps want to go back, check by `git log`
+git reset --soft HEAD~1
+# hard reset (undo commit and discard changes)
+git reset --hard HEAD~1
+git push origin &lt;branch-name&gt; --force
+# `git revert`, `git restore`, `git rm`</code></pre>
 
     <h2>Merging Branches</h2>
-    <p>Switch to the branch you want to merge into:</p>
-    <pre><code>git checkout main</code></pre>
-
-    <p>Merge another branch into your current branch:</p>
-    <pre><code>git merge &lt;branch-to-merge&gt;</code></pre>
+    <pre><code># branch of merging into
+git checkout $BRANCH-0
+# branch of merging from
+git merge $BRANCH-1</code></pre>
 
     <h2>Synchronizing with Remote Repository</h2>
-    <h3>Using <code>git pull</code> to Fetch and Merge</h3>
-    <p><code>git pull</code> combines fetching from the remote and merging into the current branch:</p>
-    <pre><code>git pull origin &lt;branch-name&gt;</code></pre>
+    <pre><code># automatically fetches and merges changes from the remote branch to current branch.
+git pull origin $BRANCH
+# fetches changes from all branches without merging, allows to review changes before manually merging them into a specific branch
+git fetch origin
+git merge origin/$BRANCH</code></pre>
 
-    <h3>Using <code>git fetch</code> and <code>git merge</code></h3>
-    <p>Fetch updates from remote without automatic merge, then manually merge:</p>
-    <pre><code>git fetch origin
-git merge origin/&lt;branch-name&gt;</code></pre>
-
-    <p>Differences between <code>git pull</code> and <code>git fetch</code> + <code>git merge</code>:</p>
-    <ul>
-        <li><code>git pull</code>: Automatically fetches and merges changes from the remote branch to your current branch.</li>
-        <li><code>git fetch</code> + <code>git merge</code>: Fetches changes from all branches without merging. Allows you to review changes before manually merging them into a specific branch.</li>
-    </ul>
-
-    <!-- Link back to the main page -->
-    <a href="index.html">Back to PyTorch DDP Tutorial</a>
 </body>
 </html>
-
