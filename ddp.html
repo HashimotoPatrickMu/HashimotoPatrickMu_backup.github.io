@@ -1,1 +1,82 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyTorch DDP Tutorial</title>
+</head>
+<body>
+    <h2>How to use PyTorch DDP to train ONE model</h2>
+    <p>Here uses a single linear layer for demonstration.</p>
+
+    <h2>How to use PyTorch DDP to train TWO models</h2>
+    <p>Here uses a GAN model for demonstration.</p>
+
+    <hr>
+
+    <h2>How to use PyTorch DDP to train ONE model</h2>
+    <p>PyTorch's Distributed Data Parallel (DDP) allows for efficient distributed training by dividing the data across multiple nodes and synchronizing the gradients. Here's a simple example using a single linear layer model.</p>
+
+    <h3>Step 1: Environment Setup</h3>
+    <p>Before starting, ensure you have PyTorch installed and your environment is set up for distributed training. This typically involves setting up multiple GPUs on a single machine or across multiple machines.</p>
+
+    <h3>Step 2: Initialize the Process Group</h3>
+    <p>DDP requires initializing the process group, which handles communication between the nodes.</p>
+    <pre><code>import torch.distributed as dist
+
+dist.init_process_group(backend="nccl", init_method="env://")</code></pre>
+
+    <h3>Step 3: Create the Model</h3>
+    <p>Define a simple linear model. When using DDP, each process (typically mapped to a GPU) will instantiate a copy of the model.</p>
+    <pre><code>import torch.nn as nn
+import torch.nn.parallel
+
+class SimpleModel(nn.Module):
+    def __init__(self):
+        super(SimpleModel, self).__init__()
+        self.linear = nn.Linear(10, 1)  # Example layer
+
+    def forward(self, x):
+        return self.linear(x)
+
+model = SimpleModel().cuda()
+model = torch.nn.parallel.DistributedDataParallel(model)</code></pre>
+
+    <h3>Step 4: Train the Model</h3>
+    <p>Train the model using your typical training loop, ensuring data is distributed appropriately across processes.</p>
+
+    <hr>
+
+    <h2>How to use PyTorch DDP to train TWO models</h2>
+    <p>Training two models, such as in a Generative Adversarial Network (GAN), involves handling two different models simultaneously. Here's a brief overview using DDP.</p>
+
+    <h3>Step 1: Define the Models</h3>
+    <p>Define your generator and discriminator models. Similar to the single model case, each will be duplicated across processes.</p>
+    <pre><code>class Generator(nn.Module):
+    # Generator definition
+
+class Discriminator(nn.Module):
+    # Discriminator definition</code></pre>
+
+    <h3>Step 2: Initialize DDP for Each Model</h3>
+    <p>After defining the models, wrap each one with DistributedDataParallel.</p>
+    <pre><code>generator = Generator().cuda()
+discriminator = Discriminator().cuda()
+
+generator = torch.nn.parallel.DistributedDataParallel(generator)
+discriminator = torch.nn.parallel.DistributedDataParallel(discriminator)</code></pre>
+
+    <h3>Step 3: Train the Models</h3>
+    <p>During training, alternate between training the generator and discriminator. Ensure data is appropriately partitioned and synchronized across processes.</p>
+    <pre><code>for epoch in range(num_epochs):
+    # Train discriminator
+    # Train generator</code></pre>
+
+    <p>Remember to clean up and terminate the process group when your training is complete to free up resources.</p>
+    <pre><code>dist.destroy_process_group()</code></pre>
+
+    <p>This guide provides a basic understanding of using DDP with PyTorch. For more complex scenarios and best practices, refer to the official PyTorch documentation on distributed training.</p>
+
+</body>
+</html>
